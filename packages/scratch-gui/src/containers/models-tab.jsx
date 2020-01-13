@@ -45,43 +45,43 @@ let messages = defineMessages({
     addLibraryBackdropMsg: {
         defaultMessage: 'Choose a Backdrop',
         description: 'Button to add a backdrop in the editor tab',
-        id: 'gui.costumeTab.addBackdropFromLibrary'
+        id: 'gui.modelsTab.addBackdropFromLibrary'
     },
     addLibraryCostumeMsg: {
         defaultMessage: 'Choose a Costume',
         description: 'Button to add a costume in the editor tab',
-        id: 'gui.costumeTab.addCostumeFromLibrary'
+        id: 'gui.modelsTab.addCostumeFromLibrary'
     },
     addBlankCostumeMsg: {
         defaultMessage: 'Paint',
         description: 'Button to add a blank costume in the editor tab',
-        id: 'gui.costumeTab.addBlankCostume'
+        id: 'gui.modelsTab.addBlankCostume'
     },
     addSurpriseCostumeMsg: {
         defaultMessage: 'Surprise',
         description: 'Button to add a surprise costume in the editor tab',
-        id: 'gui.costumeTab.addSurpriseCostume'
+        id: 'gui.modelsTab.addSurpriseCostume'
     },
     addFileBackdropMsg: {
         defaultMessage: 'Upload Backdrop',
         description: 'Button to add a backdrop by uploading a file in the editor tab',
-        id: 'gui.costumeTab.addFileBackdrop'
+        id: 'gui.modelsTab.addFileBackdrop'
     },
     addFileCostumeMsg: {
         defaultMessage: 'Upload Costume',
         description: 'Button to add a costume by uploading a file in the editor tab',
-        id: 'gui.costumeTab.addFileCostume'
+        id: 'gui.modelsTab.addFileCostume'
     },
     addCameraCostumeMsg: {
         defaultMessage: 'Camera',
         description: 'Button to use the camera to create a costume costume in the editor tab',
-        id: 'gui.costumeTab.addCameraCostume'
+        id: 'gui.modelsTab.addCameraCostume'
     }
 });
 
 messages = {...messages, ...sharedMessages};
 
-class CostumeTab extends React.Component {
+class ModelsTab extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -356,7 +356,7 @@ class CostumeTab extends React.Component {
     }
 }
 
-CostumeTab.propTypes = {
+ModelsTab.propTypes = {
     cameraModalVisible: PropTypes.bool,
     dispatchUpdateRestore: PropTypes.func,
     editingTarget: PropTypes.string,
@@ -418,9 +418,9 @@ const mapDispatchToProps = dispatch => ({
     onShowImporting: () => dispatch(showStandardAlert('importingAsset'))
 });
 
-export default errorBoundaryHOC('Costume Tab')(
+export default errorBoundaryHOC('Models Tab')(
     injectIntl(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(CostumeTab))
+    )(ModelsTab))
 );
