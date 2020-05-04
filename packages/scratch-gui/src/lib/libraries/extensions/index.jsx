@@ -1,8 +1,8 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import arduinoRobotIconURL from './arduino_extension/arduino_extension.png';
-import arduinoRobotInsetIconURL from './arduino_extension/arduino_small.svg';
+import teachableMachineBlocksIconURL from './teachable-machine-blocks/teachable-machine-blocks.png';
+import teachableMachineBlocksInsetIconURL from './teachable-machine-blocks/teachable-machine-blocks-small.svg';
 
 import musicIconURL from './music/music.png';
 import musicInsetIconURL from './music/music-small.svg';
@@ -51,21 +51,21 @@ import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
     {
-         name: (
+        name: (
             <FormattedMessage
-                defaultMessage="PRG Arduino Robot"
-                description="Name for the 'Arduino Robot' Extension"
-                id="gui.extension.arduino-robot.name"
+                defaultMessage="Teachable Machine"
+                description="Teachable Machine name"
+                id="gui.extension.teachable-machine.name"
             />
         ),
-        extensionId: 'arduinoRobot',
-        iconURL: arduinoRobotIconURL,
-        insetIconURL: arduinoRobotInsetIconURL,
+        extensionId: 'teachableMachine',
+        iconURL: teachableMachineBlocksIconURL,
+        insetIconURL: teachableMachineBlocksInsetIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="Use Scratch to program an Arduino smart car robot"
-                description="PRG Arduino Robot Car description"
-                id="gui.extension.arduino-robot.description"
+                defaultMessage="Use your Teachable Machine models in your Scratch project!"
+                description="Teachable Machine Description"
+                id="gui.extension.teachable-machine.description"
             />
         ),
         featured: true
