@@ -149,6 +149,7 @@ const mapStateToProps = state => {
         ),
         telemetryModalVisible: state.scratchGui.modals.telemetryModal,
         tipsLibraryVisible: state.scratchGui.modals.tipsLibrary,
+        tmModelModalVisible: state.scratchGui.modals.tmModelModal,
         vm: state.scratchGui.vm
     };
 };

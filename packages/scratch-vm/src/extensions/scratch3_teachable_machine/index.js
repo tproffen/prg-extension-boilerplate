@@ -101,7 +101,13 @@ class Scratch3VideoSensingBlocks {
          * @type {boolean}
          */
         this.firstInstall = true;
-
+        
+        this.runtime.on('TM_ADD_MODEL', modelInfo => {
+            //this.emit(Runtime.BLOCK_GLOW_OFF, glowData);
+            console.log(modelInfo);
+            console.log("Calling bound function");
+            this.addModel.bind(this, modelInfo);
+        });
         if (this.runtime.ioDevices) {
             // Configure the video device with values from globally stored locations.
             this.runtime.on(Runtime.PROJECT_LOADED, this.updateVideoDisplay.bind(this));
@@ -443,6 +449,11 @@ class Scratch3VideoSensingBlocks {
             menuIconURI: menuIconURI,
             blocks: [
                 {
+                    func: 'ADD_A_MODEL',
+                    blockType: BlockType.BUTTON,
+                    text: 'Add Model'
+                },
+                {
                     // @todo (copied from motion) this hat needs to be set itself to restart existing
                     // threads like Scratch 2's behaviour.
                     opcode: 'whenModelMatches',
@@ -653,6 +664,18 @@ class Scratch3VideoSensingBlocks {
         const transparency = Cast.toNumber(args.TRANSPARENCY);
         this.globalVideoTransparency = transparency;
         this.runtime.ioDevices.video.setPreviewGhost(transparency);
+    }
+    
+    /**
+     * this.emit(Runtime.EXTENSION_FIELD_ADDED, {
+                    name: `field_${fieldTypeInfo.extendedName}`,
+                    implementation: fieldTypeInfo.fieldImplementation
+                });
+     */
+    addModel (args) {
+        console.log("Adding a new model");
+        console.log("\t" + args['model_name']);
+        console.log("\t" + args['model_url']);
     }
 }
 
