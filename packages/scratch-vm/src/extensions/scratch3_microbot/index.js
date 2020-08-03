@@ -280,8 +280,11 @@ class MicrobitRobot {
     }
     disconnectedFromExtension() {
         this._mStatus = 1;
+        var msg = {}; 
         console.log("Lost connection to robot");   
         this.scratch_vm.emit(this.scratch_vm.constructor.PERIPHERAL_DISCONNECTED);
+        msg.status = "disconnected";
+        if (this._mConnection != null) this._mConnection.postMessage(msg);  
     }
     connectToExtension() {
         // Can probably do this without Chrome extension
