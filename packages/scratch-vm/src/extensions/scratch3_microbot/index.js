@@ -62,7 +62,7 @@ class MicrobitRobot {
         this.b_button = 0;
         this.left_line = 0;
         this.right_line = 0;
-        this.last_blue_time = 0;
+        this.last_ble_time = 0;
         
         this.scratch_vm.on('PROJECT_STOP_ALL', this.resetRobot.bind(this));
         this.scratch_vm.on('CONNECT_MICROBIT_ROBOT', this.connectToBLE.bind(this));
@@ -425,7 +425,7 @@ class MicrobitRobot {
     let command = args.COMMAND;
     let current_time = Date.now();
     
-    if (current_time - this.last_ble_time > BLE_UPDATE_TIME) {s
+    if (current_time - this.last_ble_time > BLE_UPDATE_TIME) {
 	    console.log("BLE Update");
         // send command to trigger distance read
         if (this._mServices) this._mServices.uartService.sendText(command);
@@ -514,8 +514,7 @@ class MicrobitRobot {
   
   stopMusic () {
     console.log("Music off");
-    let arg = {COMMAND:"O#"};
-    this.sendCommand(arg);
+    if (this._mServices) this._mServices.uartService.sendText("O#");
     
     return;
   }
@@ -541,9 +540,8 @@ class MicrobitRobot {
     
   }
   rgbLedOff () {
-    console.log("Headlights off: " + "N#");
-    let arg = {COMMAND:"N#"};
-    this.sendCommand(arg);
+    console.log("Headlights off: N#");
+    if (this._mServices) this._mServices.uartService.sendText("N#");
         
     return;
   }
@@ -638,8 +636,7 @@ class MicrobitRobot {
 
   stopMotors () {
     console.log("Sending stop motors");
-    let arg = {COMMAND:"0#"};
-    this.sendCommand(arg);
+    if (this._mServices) this._mServices.uartService.sendText("0#");
   }
     
   /**
