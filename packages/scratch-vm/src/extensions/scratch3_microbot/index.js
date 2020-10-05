@@ -514,8 +514,7 @@ class MicrobitRobot {
   
   stopMusic () {
     console.log("Music off");
-    let arg;
-    arg.COMMAND = "O#";
+    let arg = {COMMAND:"O#"};
     this.sendCommand(arg);
     
     return;
@@ -537,15 +536,13 @@ class MicrobitRobot {
     
     console.log("set LED color: " + args.COLOR + " " + colorCmd);
     // Send message
-    let arg;
-    arg.COMMAND = colorCmd;
+    let arg = {COMMAND:colorCmd};
     this.sendCommand(arg);
     
   }
   rgbLedOff () {
     console.log("Headlights off: " + "N#");
-    let arg;
-    arg.COMMAND = "N#";
+    let arg = {COMMAND:"N#"};
     this.sendCommand(arg);
         
     return;
@@ -577,8 +574,7 @@ class MicrobitRobot {
      * @returns {string} the distance, in cm, of the nearest object. -1 means error
      */
   readDistance () {
-    let arg;
-    arg.COMMAND = "W#";
+    let arg = {COMMAND:"W#"};
     this.sendCommand(arg);
     
     let distance = this.dist_read;
@@ -594,8 +590,7 @@ class MicrobitRobot {
      * @returns {string} t
      */
   readButtonStatus (args) {
-    let arg;
-    arg.COMMAND = "W#";
+    let arg = {COMMAND:"W#"};
     this.sendCommand(arg);
     
     var state = args.BUTTON;
@@ -624,8 +619,7 @@ class MicrobitRobot {
      * @returns {string} t
      */
   readLineStatus (args) {
-    let arg;
-    arg.COMMAND = "W#";
+    let arg = {COMMAND:"W#"};
     this.sendCommand(arg);
     
     var state = args.LINE;
@@ -644,8 +638,7 @@ class MicrobitRobot {
 
   stopMotors () {
     console.log("Sending stop motors");
-    let arg;
-    arg.COMMAND = "0#";
+    let arg = {COMMAND:"0#"};
     this.sendCommand(arg);
   }
     
@@ -661,13 +654,11 @@ class MicrobitRobot {
     
     if (dir == 'forward') {
         console.log("Sending drive forward, secs: " + secs);
-		let arg;
-		arg.COMMAND = "A#";
+	    let arg = {COMMAND:"A#"};
 		this.sendCommand(arg);
     } else {
         console.log('Sending drive backward, secs: ' + secs);
-		let arg;
-		arg.COMMAND = "B#";
+	    let arg = {COMMAND:"B#"};
 		this.sendCommand(arg);
 
     }
@@ -692,13 +683,11 @@ class MicrobitRobot {
     
     if (dir == 'left') {
         console.log("Sending turn left, secs: " + secs);
-		let arg;
-		arg.COMMAND = "E#";
-		this.sendCommand(arg);
+	    let arg = {COMMAND:"E#"};
+	    this.sendCommand(arg);
     } else {
         console.log("Sending turn right, secs: " + secs);
-		let arg;
-		arg.COMMAND = "D#";
+	    let arg = {COMMAND:"D#"};
 		this.sendCommand(arg);
     }
 
