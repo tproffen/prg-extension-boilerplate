@@ -16,7 +16,7 @@ const builtinExtensions = {
     pen: () => require('../extensions/scratch3_pen'),
     //wedo2: () => require('../extensions/scratch3_wedo2'),
     music: () => require('../extensions/scratch3_music'),
-    //microbit: () => require('../extensions/scratch3_microbit'),
+    microbit: () => require('../extensions/scratch3_microbit'),
     text2speech: () => require('../extensions/scratch3_text2speech'),
     speech2text: () => require('../extensions/scratch3_speech2text'),
     translate: () => require('../extensions/scratch3_translate'),
@@ -25,10 +25,10 @@ const builtinExtensions = {
     //makeymakey: () => require('../extensions/scratch3_makeymakey'),
     //boost: () => require('../extensions/scratch3_boost'),
     //gdxfor: () => require('../extensions/scratch3_gdx_for')
-    arduinoRobot: () => require('../extensions/scratch3_arduinobot'),
-    gizmoRobot: () => require('../extensions/scratch3_gizmo'),
+    //arduinoRobot: () => require('../extensions/scratch3_arduinobot'),
+    //gizmoRobot: () => require('../extensions/scratch3_gizmo'),
     microbitRobot: () => require('../extensions/scratch3_microbot'),
-    teachableMachine: () => require('../extensions/scratch3_teachable_machine')
+    //teachableMachine: () => require('../extensions/scratch3_teachable_machine')
 };
 
 /**

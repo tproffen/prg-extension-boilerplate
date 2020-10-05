@@ -58,7 +58,7 @@ import gdxforConnectionIconURL from './gdxfor/gdxfor-illustration.svg';
 import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
-    {
+    /*{
         name: (
             <FormattedMessage
                 defaultMessage="Teachable Machine"
@@ -77,11 +77,11 @@ export default [
             />
         ),
         featured: true
-    },
+    },*/
     {
          name: (
             <FormattedMessage
-                defaultMessage="PRG Microbit Robot"
+                defaultMessage="Microbit Robot"
                 description="Name for the 'Microbit Robot' Extension"
                 id="gui.extension.microbit-robot.name"
             />
@@ -98,7 +98,7 @@ export default [
         ),
         featured: true
     },
-    {
+    /*{
          name: (
             <FormattedMessage
                 defaultMessage="PRG Gizmo Robot"
@@ -136,7 +136,7 @@ export default [
             />
         ),
         featured: true
-    },
+    },*/
     {
         name: (
             <FormattedMessage
@@ -255,7 +255,7 @@ export default [
             />
         ),
         featured: true
-    },
+    },*/
     {
         name: 'micro:bit',
         extensionId: 'microbit',
@@ -286,7 +286,7 @@ export default [
         ),
         helpLink: 'https://scratch.mit.edu/microbit'
     },
-    {
+    /*{
         name: 'LEGO MINDSTORMS EV3',
         extensionId: 'ev3',
         collaborator: 'LEGO',

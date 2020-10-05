@@ -172,7 +172,48 @@ class MicrobitRobot {
                     arguments: { }
                 },
                 '---',
+                                {
+                    opcode: 'drive',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'microbitBot.driveForwardBackward',
+                        default: 'drive [DIR]',
+                        description: 'Send command to robot to drive forward or backward'
+                    }),
+                    arguments: {
+                        DIR: {
+                            type:ArgumentType.String,
+                            menu: 'DIRS',
+                            defaultValue: _drive[0]
+                        }
+                    }
+                },
                 {
+                    opcode: 'turn',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'microbitBot.turnRightLeft',
+                        default: 'turn [TURN]',
+                        description: 'Send command to robot to turn right or left'
+                    }),
+                    arguments: {
+                        TURN: {
+                            type:ArgumentType.String,
+                            menu: 'TURNS',
+                            defaultValue: _turn[0]
+                        }
+                    }
+                },
+                {
+                	opcode: 'stopMotors',
+                	blockType: BlockType.COMMAND,
+                	text: formatMessage({
+                		id: 'microbitBot.stopMotors',
+                		default: 'stop motors',
+                		description: 'Send command to robot to stop moving'
+                	})
+                },
+                /*{
                     opcode: 'drive',
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
@@ -211,7 +252,7 @@ class MicrobitRobot {
                             defaultValue: _turn[0]
                         }
                     }
-                },
+                },*/
                 '---',
                 {
                     opcode: 'playMusic',
@@ -608,7 +649,7 @@ class MicrobitRobot {
    */
   drive (args) {
 	var msg = {};
-    var secs = args.NUM;
+    var secs = args.NUM; // currently ignored
     var dir = args.DIR;
     
     if (dir == 'forward') {
@@ -620,13 +661,13 @@ class MicrobitRobot {
 
     }
     if (this._mConnection != null) this._mConnection.postMessage(msg);  
-    
-    return new Promise(resolve => {
+    return;
+    /*return new Promise(resolve => {
             setTimeout(() => {
                 this.stopMotors();
                 resolve();
             }, secs*1000);
-        });
+        });*/
   }
   
   /**
@@ -637,7 +678,7 @@ class MicrobitRobot {
    */
   turn(args) {
 	var msg = {};
-    var secs = args.NUM;
+    var secs = args.NUM; // currently ignored
     var dir = args.TURN;
     
     if (dir == 'left') {
@@ -649,13 +690,13 @@ class MicrobitRobot {
     }
 
     if (this._mConnection != null) this._mConnection.postMessage(msg);  
-    
-    return new Promise(resolve => {
+    return;
+    /*return new Promise(resolve => {
             setTimeout(() => {
                 this.stopMotors();
                 resolve();
             }, secs*1000);
-        });
+        });*/
   }
  
 }
