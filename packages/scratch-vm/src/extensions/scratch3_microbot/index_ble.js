@@ -412,6 +412,7 @@ class MicrobitRobot {
     }
    
   resetRobot() {
+  	console.log("Stopping robot");
     this.stopMotors();
     this.rgbLedOff();
     this.stopMusic();
@@ -501,7 +502,7 @@ class MicrobitRobot {
     console.log(noteIdx + " " + note);
     
     // Play song  
-    if (this._mServices) this._mServices.uartService.sendText(note);
+    if (this._mServices) this._mServices.uartService.sendText(note); // RANDI leave this because timing matters
     
     return new Promise(resolve => {
             setTimeout(() => {
@@ -536,7 +537,9 @@ class MicrobitRobot {
     
     console.log("set LED color: " + args.COLOR + " " + colorCmd);
     // Send message
-    if (this._mServices) this._mServices.uartService.sendText(colorCmd);
+    let arg;
+    arg.COMMAND = colorCmd;
+    this.sendCommand(arg);
     
   }
   rgbLedOff () {
