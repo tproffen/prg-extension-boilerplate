@@ -12,6 +12,8 @@ const microbit  = require("microbit-web-bluetooth");
 
 
 const blockIconURI = 'data:image/png;base64,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';
+const BLE_UPDATE_TIME = 100;
+
 const _colors = ['red', 'green', 'blue', 'yellow', 'cyan', 'magenta', 'white', 'random'];
 const _colors_protocol = ['G#','J#','H#','K#','I#','L#','M#'];
 
@@ -60,9 +62,9 @@ class MicrobitRobot {
         this.b_button = 0;
         this.left_line = 0;
         this.right_line = 0;
-        this.last_reading_time = 0;
+        this.last_blue_time = 0;
         
-        this.scratch_vm.on('PROJEeCT_STOP_ALL', this.resetRobot.bind(this));
+        this.scratch_vm.on('PROJECT_STOP_ALL', this.resetRobot.bind(this));
         this.scratch_vm.on('CONNECT_MICROBIT_ROBOT', this.connectToBLE.bind(this));
         
         console.log("Version: adding clear led display");
@@ -415,13 +417,22 @@ class MicrobitRobot {
     this.stopMusic();
   }
   
-  /**
-   * RANDI just for testing out sending commands to robot via ble
-   */
+  /*
+  * 
+  */
   sendCommand (args) {
     let command = args.COMMAND;
-    if (this._mServices) this._mServices.uartService.sendText(command);
-    else console.log("No device");
+    let current_time = Date.now();
+    
+    if (current_time - this.last_ble_time > BLE_UPDATE_TIME) {s
+	    console.log("BLE Update");
+        // send command to trigger distance read
+        if (this._mServices) this._mServices.uartService.sendText(command);
+        else console.log("No device");
+        
+        this.last_ble_time = current_time;
+    }
+
   }
   
   clearLedDisplay (args) {
@@ -501,8 +512,10 @@ class MicrobitRobot {
   }
   
   stopMusic () {
-    console.log("Music off");     
-    if (this._mServices) this._mServices.uartService.sendText('O#');
+    console.log("Music off");
+    let arg;
+    arg.COMMAND = "O#";
+    this.sendCommand(arg);
     
     return;
   }
@@ -527,8 +540,10 @@ class MicrobitRobot {
     
   }
   rgbLedOff () {
-    console.log("Headlights off: " + "O#");
-    if (this._mServices) this._mServices.uartService.sendText('N#');
+    console.log("Headlights off: " + "N#");
+    let arg;
+    arg.COMMAND = "N#";
+    this.sendCommand(arg);
         
     return;
   }
@@ -559,13 +574,9 @@ class MicrobitRobot {
      * @returns {string} the distance, in cm, of the nearest object. -1 means error
      */
   readDistance () {
-    let current_time = Date.now();
-    if (current_time - this.last_reading_time > 250) {
-        console.log("Updating sensors");
-        // send command to trigger distance read
-        if (this._mServices) this._mServices.uartService.sendText('W#');
-        this.last_reading_time = current_time;
-    }
+    let arg;
+    arg.COMMAND = "W#";
+    this.sendCommand(arg);
     
     let distance = this.dist_read;
     if (distance == 0) {
@@ -580,13 +591,9 @@ class MicrobitRobot {
      * @returns {string} t
      */
   readButtonStatus (args) {
-    let current_time = Date.now();
-    if (current_time - this.last_reading_time > 250) {
-        console.log("Updating sensors");
-        // send command to trigger distance read
-        if (this._mServices) this._mServices.uartService.sendText('W#');
-        this.last_reading_time = current_time;
-    }
+    let arg;
+    arg.COMMAND = "W#";
+    this.sendCommand(arg);
     
     var state = args.BUTTON;
     if (state == 'A') {
@@ -614,13 +621,9 @@ class MicrobitRobot {
      * @returns {string} t
      */
   readLineStatus (args) {
-    let current_time = Date.now();
-    if (current_time - this.last_reading_time > 250) {
-        console.log("Updating sensors");
-        // send command to trigger distance read
-        if (this._mServices) this._mServices.uartService.sendText('W#');
-        this.last_reading_time = current_time;
-    }
+    let arg;
+    arg.COMMAND = "W#";
+    this.sendCommand(arg);
     
     var state = args.LINE;
     
@@ -638,7 +641,9 @@ class MicrobitRobot {
 
   stopMotors () {
     console.log("Sending stop motors");
-    if (this._mServices) this._mServices.uartService.sendText('0#');
+    let arg;
+    arg.COMMAND = "0#";
+    this.sendCommand(arg);
   }
     
   /**
@@ -648,19 +653,21 @@ class MicrobitRobot {
    * @callback {function} the code to call when this function is done executing
    */
   drive (args) {
-	var msg = {};
     var secs = args.NUM; // currently ignored
     var dir = args.DIR;
     
     if (dir == 'forward') {
-        console.log("Sending drive forward, secs: " + secs);        
-        if (this._mServices) this._mServices.uartService.sendText('A#');
+        console.log("Sending drive forward, secs: " + secs);
+		let arg;
+		arg.COMMAND = "A#";
+		this.sendCommand(arg);
     } else {
         console.log('Sending drive backward, secs: ' + secs);
-        if (this._mServices) this._mServices.uartService.sendText('B#');
+		let arg;
+		arg.COMMAND = "B#";
+		this.sendCommand(arg);
 
     }
-    if (this._mConnection != null) this._mConnection.postMessage(msg);  
     return;
     /*return new Promise(resolve => {
             setTimeout(() => {
@@ -677,19 +684,21 @@ class MicrobitRobot {
    * @callback {function} the code to call when this function is done executing
    */
   turn(args) {
-	var msg = {};
     var secs = args.NUM; // currently ignored
     var dir = args.TURN;
     
     if (dir == 'left') {
-        console.log("Sending turn left, secs: " + secs);        
-        if (this._mServices) this._mServices.uartService.sendText('E#');
+        console.log("Sending turn left, secs: " + secs);
+		let arg;
+		arg.COMMAND = "E#";
+		this.sendCommand(arg);
     } else {
-        console.log("Sending turn right, secs: " + secs);        
-        if (this._mServices) this._mServices.uartService.sendText('D#');
+        console.log("Sending turn right, secs: " + secs);
+		let arg;
+		arg.COMMAND = "D#";
+		this.sendCommand(arg);
     }
 
-    if (this._mConnection != null) this._mConnection.postMessage(msg);  
     return;
     /*return new Promise(resolve => {
             setTimeout(() => {
