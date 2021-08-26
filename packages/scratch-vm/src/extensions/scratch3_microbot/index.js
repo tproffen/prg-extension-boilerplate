@@ -210,7 +210,7 @@ class MicrobitRobot {
                     opcode: 'stopMotors',
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
-                        id: 'mircobitBot.stopMotors',
+                        id: 'microbitBot.stopMotors',
                         default: 'stop motors',
                         description: 'Stop both motors on the robot'
                     })
@@ -240,7 +240,7 @@ class MicrobitRobot {
                     opcode: 'playMusic',
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
-                        id: 'mircobitBot.playMusic',
+                        id: 'microbitBot.playMusic',
                         default: 'play song [SONG]',
                         description: 'Play song'
                     }),
@@ -256,7 +256,7 @@ class MicrobitRobot {
                     opcode: 'stopMusic',
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
-                        id: 'mircobitBot.stopMusic',
+                        id: 'microbitBot.stopMusic',
                         default: 'stop music',
                         description: 'Stop any running music'
                     })
@@ -265,7 +265,7 @@ class MicrobitRobot {
                 {
                     opcode: 'whenButtonPressed',
                     text: formatMessage({
-                        id: 'mircobitBot.readButtonStatus',
+                        id: 'microbitBot.readButtonStatus',
                         default: 'when [BUTTON] button pressed',
                         description: 'Trigger when buttons on microbit are pressed'
                     }),
@@ -282,7 +282,7 @@ class MicrobitRobot {
                     opcode: 'readLineStatus',
                     blockType: BlockType.BOOLEAN,
                     text: formatMessage({
-                        id: 'mircobitBot.readLineSensorStatus',
+                        id: 'microbitBot.readLineSensorStatus',
                         default: 'line detected on [LINE]',
                         description: 'detect line sensor state'
                     }),
@@ -298,7 +298,7 @@ class MicrobitRobot {
                     opcode: 'readLight',
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
-                        id: 'mircobitBot.readLight',
+                        id: 'microbitBot.readLight',
                         default: 'read light level',
                         description: 'Get light level reading'
                     })
@@ -307,7 +307,7 @@ class MicrobitRobot {
                     opcode: 'readAcc',
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
-                        id: 'mircobitBot.readAcc',
+                        id: 'microbitBot.readAcc',
                         default: 'read accelerometer',
                         description: 'Get reading from accelerometer (strength)'
                     })
@@ -316,7 +316,7 @@ class MicrobitRobot {
                     opcode: 'readDistance',
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
-                        id: 'mircobitBot.readDistance',
+                        id: 'microbitBot.readDistance',
                         default: 'read distance',
                         description: 'Get distance read from ultrasonic distance sensor'
                     })
@@ -522,20 +522,24 @@ class MicrobitRobot {
     if (isNaN(this.left_line)) this.left_line = 0;
     if (isNaN(this.right_line)) this.right_line = 0;
   }
-  
+  /**
+   *
+   */
+	getValues() {
+		let current_time = Date.now();
+		if (current_time - this.last_reading_time > 250) {
+			console.log("Updating sensors");
+			// send command to trigger distance read
+			if (this._mServices) this._mServices.uartService.sendText('W#');
+			this.last_reading_time = current_time;
+		}
+	}
   /**
      * Implement readDistance
      * @returns {string} the distance, in cm, of the nearest object. -1 means error
      */
   readDistance () {
-    let current_time = Date.now();
-    if (current_time - this.last_reading_time > 250) {
-        console.log("Updating sensors");
-        // send command to trigger distance read
-        if (this._mServices) this._mServices.uartService.sendText('W#');
-        this.last_reading_time = current_time;
-    }
-    
+    this.getValues();
     let distance = this.dist_read;
     if (distance == 0) {
         distance = -1;
@@ -548,7 +552,8 @@ class MicrobitRobot {
      * Implement readLight
      * @returns {string} the light sensor reading. -1 means error
      */
-  readLight () {    
+  readLight () { 
+	this.getValues();
     let light = this.light_read;
     if (light == 0) {
         light = -1;
@@ -560,7 +565,8 @@ class MicrobitRobot {
      * Implement readAcc
      * @returns {string} the accelerometer strength reading. -1 means error
      */
-  readAcc () {    
+  readAcc () {   
+	this.getValues();
     let acc = this.acc_read;
     if (acc == 0) {
         acc = -1;
