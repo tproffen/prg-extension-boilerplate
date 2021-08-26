@@ -37,13 +37,6 @@ const CrashMessage = props => (
                     />
                 </p>
             )}
-            <a
-                href="https://dancingwithai.github.io/?"
-                className={styles.reloadButton}
-                style={{textDecoration: 'none', display: 'inline-block', marginBottom: 14}}
-            >
-                Back to Curriculum
-            </a><br/>
             <button
                 className={styles.reloadButton}
                 onClick={props.onReload}

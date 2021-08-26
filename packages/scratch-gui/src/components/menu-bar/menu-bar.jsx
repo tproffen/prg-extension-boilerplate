@@ -70,7 +70,7 @@ import remixIcon from './icon--remix.svg';
 import dropdownCaret from './dropdown-caret.svg';
 import languageIcon from '../language-selector/language-icon.svg';
 
-import scratchLogo from './prg-white.png';
+import scratchLogo from './orcsgirls.png';
 
 import sharedMessages from '../../lib/shared-messages';
 
@@ -320,12 +320,19 @@ class MenuBar extends React.Component {
             >
                 <div className={styles.mainMenu}>
                     <div className={styles.fileGroup}>
-                        <a
-                            className={classNames(styles.menuBarItem, styles.hoverable)}
-                            href="https://dancingwithai.github.io/?"
-                        >
-                            ⬅ Back to Curriculum
-                        </a>
+                       <div className={classNames(styles.menuBarItem)}>
+							<a href="https://www.orcsgirls.org" target="_blank">
+                            <img
+                                alt="ORCSGirls"
+                                className={classNames(styles.scratchLogo, {
+                                    [styles.clickable]: typeof this.props.onClickLogo !== 'undefined'
+                                })}
+                                draggable={false}
+                                src={this.props.logo}
+                                onClick={this.props.onClickLogo}
+                            />
+							</a>
+                        </div>
                         {(this.props.canChangeLanguage) && (<div
                             className={classNames(styles.menuBarItem, styles.hoverable, styles.languageMenu)}
                         >
