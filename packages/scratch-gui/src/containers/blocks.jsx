@@ -22,7 +22,7 @@ import defineDynamicBlock from '../lib/define-dynamic-block';
 import {connect} from 'react-redux';
 import {updateToolbox} from '../reducers/toolbox';
 import {activateColorPicker} from '../reducers/color-picker';
-import {closeExtensionLibrary, openSoundRecorder, openConnectionModal} from '../reducers/modals';
+import {closeExtensionLibrary, openSoundRecorder, openConnectionModal, openTextModelModal,openClassifierModelModal} from '../reducers/modals';
 import {activateCustomProcedures, deactivateCustomProcedures} from '../reducers/custom-procedures';
 import {setConnectionModalExtensionId} from '../reducers/connection-modal';
 
@@ -107,18 +107,23 @@ class Blocks extends React.Component {
         const procButtonCallback = () => {
             this.ScratchBlocks.Procedures.createProcedureDefCallback_(this.workspace);
         };
+        const textModelEditButtonCallback = () => {
+            this.props.onOpenTextModelModal();
+        };
+        const classifierModelEditButtonCallback = () => {
+            this.props.onOpenClassifierModelModal();
+        }
+        const connectMicrobitRobotCallback = () => {
+            this.props.vm.runtime.emit('CONNECT_MICROBIT_ROBOT');
+        }
 
         toolboxWorkspace.registerButtonCallback('MAKE_A_VARIABLE', varListButtonCallback(''));
         toolboxWorkspace.registerButtonCallback('MAKE_A_LIST', varListButtonCallback('list'));
         toolboxWorkspace.registerButtonCallback('MAKE_A_PROCEDURE', procButtonCallback);
-        toolboxWorkspace.registerButtonCallback('POSE_ENABLE_BODY', () => {
-            console.log("Enabling body pose tracking!");
-            // TODO: store in VM runtime
-        });
-        toolboxWorkspace.registerButtonCallback('POSE_ENABLE_HAND', () => {
-            console.log("Enabling hand pose tracking!");
-            // TODO: store in VM runtime
-        });
+        toolboxWorkspace.registerButtonCallback('EDIT_TEXT_MODEL', textModelEditButtonCallback);
+        toolboxWorkspace.registerButtonCallback('EDIT_TEXT_CLASSIFIER', classifierModelEditButtonCallback);
+        toolboxWorkspace.registerButtonCallback('CONNECT_MICROBIT_ROBOT', connectMicrobitRobotCallback);
+
 
         // Store the xml of the toolbox that is actually rendered.
         // This is used in componentDidUpdate instead of prevProps, because
@@ -431,11 +436,9 @@ class Blocks extends React.Component {
 
         // scratch-blocks implements a menu or custom field as a special kind of block ("shadow" block)
         // these actually define blocks and MUST run regardless of the UI state
-        if (categoryInfo.customFieldTypes) {
-            defineBlocks(
-                Object.getOwnPropertyNames(categoryInfo.customFieldTypes)
-                    .map(fieldTypeName => categoryInfo.customFieldTypes[fieldTypeName].scratchBlocksDefinition));
-        }
+        defineBlocks(
+            Object.getOwnPropertyNames(categoryInfo.customFieldTypes)
+                .map(fieldTypeName => categoryInfo.customFieldTypes[fieldTypeName].scratchBlocksDefinition));
         defineBlocks(categoryInfo.menus);
         defineBlocks(categoryInfo.blocks);
 
@@ -476,7 +479,7 @@ class Blocks extends React.Component {
         this.setState(p);
     }
     handleConnectionModalStart (extensionId) {
-        let prgCustomExtensions = ['teachableMachine', 'poseHand', 'poseFace', 'poseBody'];
+        let prgCustomExtensions = ['microbitRobot','teachableMachine'];
         if (!prgCustomExtensions.includes(extensionId)) {
             this.props.onOpenConnectionModal(extensionId);
         }
@@ -537,6 +540,8 @@ class Blocks extends React.Component {
             onActivateCustomProcedures,
             onRequestCloseExtensionLibrary,
             onRequestCloseCustomProcedures,
+            onOpenTextModelModal,
+            onOpenClassifierModelModal,
             toolboxXML,
             ...props
         } = this.props;
@@ -593,6 +598,8 @@ Blocks.propTypes = {
     onActivateColorPicker: PropTypes.func,
     onActivateCustomProcedures: PropTypes.func,
     onOpenConnectionModal: PropTypes.func,
+    onOpenTextModelModal: PropTypes.func,
+    onOpenClassifierModelModal: PropTypes.func,
     onOpenSoundRecorder: PropTypes.func,
     onRequestCloseCustomProcedures: PropTypes.func,
     onRequestCloseExtensionLibrary: PropTypes.func,
@@ -676,6 +683,12 @@ const mapDispatchToProps = dispatch => ({
     onOpenConnectionModal: id => {
         dispatch(setConnectionModalExtensionId(id));
         dispatch(openConnectionModal());
+    },
+    onOpenTextModelModal: () => {
+        dispatch(openTextModelModal());
+    },
+    onOpenClassifierModelModal: () => {
+        dispatch(openClassifierModelModal());
     },
     onOpenSoundRecorder: () => {
         dispatch(activateTab(SOUNDS_TAB_INDEX));

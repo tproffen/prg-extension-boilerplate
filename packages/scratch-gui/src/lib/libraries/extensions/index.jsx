@@ -36,6 +36,8 @@ import microbitInsetIconURL from './microbit/microbit-small.svg';
 import microbitConnectionIconURL from './microbit/microbit-illustration.svg';
 import microbitConnectionSmallIconURL from './microbit/microbit-small.svg';
 
+import microbitRobotIconURL from './microbot/microbot.png';
+
 import ev3IconURL from './ev3/ev3.png';
 import ev3InsetIconURL from './ev3/ev3-small.svg';
 import ev3ConnectionIconURL from './ev3/ev3-hub-illustration.svg';
@@ -60,6 +62,26 @@ import gdxforConnectionSmallIconURL from './gdxfor/gdxfor-small.svg';
 
 export default [
     {
+        name: (
+            <FormattedMessage
+                defaultMessage="Microbit Robot"
+                description="Name for the 'Microbit Robot' Extension"
+                id="gui.extension.microbit-robot.name"
+            />
+        ),
+        extensionId: 'microbitRobot',
+        iconURL: microbitRobotIconURL,
+        insetIconURL: microbitInsetIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Use Scratch to program a Microbit smart car robot"
+                description="PRG Microbit Robot description"
+                id="gui.extension.microbit-robot.description"
+            />
+        ),
+        featured: true
+    },
+	{
         name: (
             <FormattedMessage
                 defaultMessage="Teachable Machine"
