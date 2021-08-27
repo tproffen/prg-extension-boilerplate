@@ -15,8 +15,8 @@ const blockIconURI = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYA
 const _colors = ['red', 'green', 'blue', 'yellow', 'indigo', 'purple', 'white', 'random'];
 const _colors_protocol = ['G#','J#','H#','K#','I#','L#','M#'];
 
-const _songs = ['giggle','happy','hello','mysterious','slide','soaring'];
-const _songs_cmd = ['X1#','X2#','X3#','X4#','X5#','X6#'];
+const _songs = ['giggle','happy','hello','mysterious','slide'];
+const _songs_cmd = ['X1#','X2#','X3#','X4#','X5#'];
 
 const _drive = ['forward', 'backward'];
 const _servo = ['S1', 'S2'];
@@ -214,6 +214,21 @@ class MicrobitRobot {
                         default: 'stop motors',
                         description: 'Stop both motors on the robot'
                     })
+                },
+				{
+                    opcode: 'setSpeed',
+                    blockType: BlockType.COMMAND,
+                    text: formatMessage({
+                        id: 'microbitBot.setSpeed',
+                        default: 'speed [NUM]',
+                        description: 'Send command to set driving speed (0-255)'
+                    }),
+                    arguments: {
+                        NUM: {
+                            type:ArgumentType.NUMBER,
+                            defaultValue: 128
+                        }
+                    }
                 },
 				{
                     opcode: 'servo',
@@ -704,6 +719,22 @@ class MicrobitRobot {
         });
   }
  
+ /**
+   * Implement set speed
+   * @speed {number} the desired speed
+   */
+  setSpeed (args) {
+	var msg = {};
+    var speed = parseInt(args.NUM);
+    
+    console.log("Setting speed to: " + speed);        
+    if (this._mServices) this._mServices.uartService.sendText('V'+speed+'#');
+
+    if (this._mConnection != null) this._mConnection.postMessage(msg);  
+   
+    return;
+  }
+  
   /**
    * Implement turn servo
    * @angle {number} the desired angle to turn to
