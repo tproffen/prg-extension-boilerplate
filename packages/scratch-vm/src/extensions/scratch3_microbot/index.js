@@ -21,6 +21,7 @@ const _songs_cmd = ['X1#','X2#','X3#','X4#','X5#'];
 const _drive = ['forward', 'backward'];
 const _servo = ['S1', 'S2'];
 const _turn = ['left', 'right'];
+const _coor = ['x', 'y', 'z'];
 
 const _button = ['A','B','A or B','A and B','neither A nor B'];
 const _line_states = ['right side', 'left side', 'neither side', 'both sides'];
@@ -49,17 +50,18 @@ class MicrobitRobot {
 
         this.dist_read  = 0;
 		this.light_read = 0;
-		this.acc_read = 0;
+		this.sound_read = 0;
         this.a_button = 0;
         this.b_button = 0;
         this.left_line = 0;
         this.right_line = 0;
+		this.acc_read = [0,0,0];
         this.last_reading_time = 0;
         
         this.scratch_vm.on('PROJECT_STOP_ALL', this.resetRobot.bind(this));
         this.scratch_vm.on('CONNECT_MICROBIT_ROBOT', this.connectToBLE.bind(this));
         
-        console.log("Version: adding clear led display");
+        console.log("Version: ORCSGirls w/ Maqueen");
     }
 
     /**
@@ -83,18 +85,34 @@ class MicrobitRobot {
                     blockType: BlockType.BUTTON,
                     text: 'Connect Robot'
                 },
-                {
-                    opcode: 'sendCommand',
-                    blockType: BlockType.COMMAND,
+                //{
+                //    opcode: 'sendCommand',
+                //    blockType: BlockType.COMMAND,
+                //    text: formatMessage({
+                //        id: 'microbitBot.sendCommand',
+                //        default: 'send comand [COMMAND]',
+                //        description: 'Send a particular command to the robot'
+                //    }),
+                //    arguments: {
+                //        COMMAND: {
+                //            type:ArgumentType.STRING,
+                //            defaultValue: "A#"
+                //        }
+                //   }
+                //},
+				                {
+                    opcode: 'robotConnected',
+                    blockType: BlockType.BOOLEAN,
                     text: formatMessage({
-                        id: 'microbitBot.sendCommand',
-                        default: 'send comand [COMMAND]',
-                        description: 'Send a particular command to the robot'
+                        id: 'microbitBot.robotConnected',
+                        default: 'Microbit connected',
+                        description: 'returns connection status'
                     }),
                     arguments: {
-                        COMMAND: {
-                            type:ArgumentType.STRING,
-                            defaultValue: "A#"
+                        LINE: {
+                            type:ArgumentType.String,
+                            menu: 'LINE_STATES',
+                            defaultValue: _line_states[0]
                         }
                     }
                 },
@@ -293,6 +311,24 @@ class MicrobitRobot {
                         }
                     }
                 },
+				{
+                    opcode: 'whenSoundDetected',
+                    text: formatMessage({
+                        id: 'microbitBot.whenSoundDetected',
+                        default: 'when sound detected',
+                        description: 'Trigger when loud sound is detected'
+                    }),
+                    blockType: BlockType.HAT,
+                },
+				{
+                    opcode: 'whenLightDetected',
+                    text: formatMessage({
+                        id: 'microbitBot.whenLightDetected',
+                        default: 'when light detected',
+                        description: 'Trigger when bright light is detected'
+                    }),
+                    blockType: BlockType.HAT,
+                },
                 {
                     opcode: 'readLineStatus',
                     blockType: BlockType.BOOLEAN,
@@ -309,22 +345,39 @@ class MicrobitRobot {
                         }
                     }
                 },
+				'---',
                 {
-                    opcode: 'readLight',
-                    blockType: BlockType.REPORTER,
-                    text: formatMessage({
-                        id: 'microbitBot.readLight',
-                        default: 'read light level',
-                        description: 'Get light level reading'
-                    })
-                },
-				{
                     opcode: 'readAcc',
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
                         id: 'microbitBot.readAcc',
-                        default: 'read accelerometer',
-                        description: 'Get reading from accelerometer (strength)'
+                        default: 'accelerometer [COOR]',
+                        description: 'get accelerometer readings'
+                    }),
+                    arguments: {
+                        COOR: {
+                            type:ArgumentType.String,
+                            menu: 'COOR',
+                            defaultValue: _coor[0]
+                        }
+                    }
+                },
+				{
+                    opcode: 'readLight',
+                    blockType: BlockType.REPORTER,
+                    text: formatMessage({
+                        id: 'microbitBot.readLight',
+                        default: 'light level',
+                        description: 'Get light level reading'
+                    })
+                },
+				{
+                    opcode: 'readSound',
+                    blockType: BlockType.REPORTER,
+                    text: formatMessage({
+                        id: 'microbitBot.readSound',
+                        default: 'sound level',
+                        description: 'Get sound level reading (V2))'
                     })
                 },
                 {
@@ -332,7 +385,7 @@ class MicrobitRobot {
                     blockType: BlockType.REPORTER,
                     text: formatMessage({
                         id: 'microbitBot.readDistance',
-                        default: 'read distance',
+                        default: 'distance',
                         description: 'Get distance read from ultrasonic distance sensor'
                     })
                 }
@@ -357,6 +410,10 @@ class MicrobitRobot {
                 TURNS: {
                     acceptReporters: false,
                     items: _turn
+                },
+                COOR: {
+                    acceptReporters: false,
+                    items: _coor
                 },
                 BUTTON_STATES: {
                     acceptReporters: false,
@@ -405,6 +462,11 @@ class MicrobitRobot {
     
                     if (this._mServices.uartService) {
                         this._mServices.uartService.addEventListener("receiveText", this.updateSensors.bind(this));
+                        this._mDevice.addEventListener("gattserverdisconnected", this.onDeviceDisconnected.bind(this));
+                    }
+                    if (this._mServices.accelerometerService) {
+                        this._mServices.accelerometerService.addEventListener("accelerometerdatachanged", 
+						      this.updateAccelerometer.bind(this));
                         this._mDevice.addEventListener("gattserverdisconnected", this.onDeviceDisconnected.bind(this));
                     }
                 }
@@ -516,22 +578,29 @@ class MicrobitRobot {
   /**
    *
    */
+  updateAccelerometer (event) {
+    //console.log("Got accelerometer data: " + event.detail);
+	this.acc_read = [event.detail.x, event.detail.y, event.detail.z];
+  }
+  /**
+   *
+   */
   updateSensors (event) {
-    console.log("Got UART data: " + event.detail);
+    //console.log("Got UART data: " + event.detail);
     //console.log(event);
     let readings = event.detail.split(",")
     if (readings.length == 7) {
-        this.dist_read = parseInt(readings[0].substring(4));
+        this.dist_read = parseInt(readings[0]);
         this.a_button = parseInt(readings[1]);
         this.b_button = parseInt(readings[2]);
         this.left_line = parseInt(readings[3]);
         this.right_line = parseInt(readings[4]);
 		this.light_read = parseInt(readings[5]);
-		this.acc_read = parseInt(readings[6]);
+		this.sound_read = parseInt(readings[6]);
     }
     if (isNaN(this.dist_read)) this.dist_read = 0;
     if (isNaN(this.light_read)) this.light_read = 0;
-    if (isNaN(this.acc_read)) this.acc_read = 0;
+    if (isNaN(this.sound_read)) this.sound_read = 0;
     if (isNaN(this.a_button)) this.a_button = 0;
     if (isNaN(this.b_button)) this.b_button = 0;
     if (isNaN(this.left_line)) this.left_line = 0;
@@ -543,53 +612,50 @@ class MicrobitRobot {
 	getValues() {
 		let current_time = Date.now();
 		if (current_time - this.last_reading_time > 250) {
-			console.log("Updating sensors");
+			//console.log("Updating sensors");
 			// send command to trigger distance read
 			if (this._mServices) this._mServices.uartService.sendText('W#');
 			this.last_reading_time = current_time;
 		}
 	}
   /**
+     * Implement readAcc
+     * @returns {string} accelerometer reading in given direction.
+     */
+  readAcc (args) {
+	let idx = _coor.indexOf(args.COOR);
+    return this.acc_read[idx];
+  }
+  
+  /**
      * Implement readDistance
-     * @returns {string} the distance, in cm, of the nearest object. -1 means error
+     * @returns {string} the distance, in cm, of the nearest object.
      */
   readDistance () {
     this.getValues();
     let distance = this.dist_read;
-    if (distance == 0) {
-        distance = -1;
-    }
-    
     return distance;
   }
   
   /**
      * Implement readLight
-     * @returns {string} the light sensor reading. -1 means error
+     * @returns {string} the light sensor reading.
      */
   readLight () { 
 	this.getValues();
-    let light = this.light_read;
-    if (light == 0) {
-        light = -1;
-    }
-    
+    let light = this.light_read;    
     return light;
   }
   /**
-     * Implement readAcc
-     * @returns {string} the accelerometer strength reading. -1 means error
+     * Implement readSound
+     * @returns {string} the sound level reading.
      */
-  readAcc () {   
+  readSound () {   
 	this.getValues();
-    let acc = this.acc_read;
-    if (acc == 0) {
-        acc = -1;
-    }
-    
-    return acc;
+    let sound = this.sound_read;
+    return sound;
   }
-      /**
+   /**
      * Implement readButtonStaus
      * @returns {string} t
      */
@@ -623,6 +689,44 @@ class MicrobitRobot {
     return this.readButtonStatus(args);
   }
   
+  /**
+    * Implement whenSoundDetected
+    */
+  whenSoundDetected(args) {
+    let current_time = Date.now();
+    if (current_time - this.last_reading_time > 250) {
+        console.log("Updating sensors");
+        // send command to trigger distance read
+        if (this._mServices) this._mServices.uartService.sendText('W#');
+        this.last_reading_time = current_time;
+    }    
+	
+	return (this.sound_read > 50);
+  }
+
+  /**
+    * Implement whenLightDetected
+    */
+  whenLightDetected(args) {
+    let current_time = Date.now();
+    if (current_time - this.last_reading_time > 250) {
+        console.log("Updating sensors");
+        // send command to trigger distance read
+        if (this._mServices) this._mServices.uartService.sendText('W#');
+        this.last_reading_time = current_time;
+    }    
+	
+	return (this.light_read > 50);
+  }
+
+  /**
+     * Implement robotConnected
+     * @returns {string} connection status to MicroBit
+     */
+   robotConnected () {
+	   return (this._mStatus == 2);
+   }
+   
   /**
      * Implement readLineStatus
      * @returns {string} t
