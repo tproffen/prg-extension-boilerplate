@@ -502,22 +502,12 @@ class MenuBar extends React.Component {
                         Teachable Machine
                     </a>
                     <Divider className={classNames(styles.divider)} />
-                    {true ? (
-                        <div>
-                            <div
-                                aria-label={this.props.intl.formatMessage(ariaMessages.tutorials)}
-                                className={classNames(styles.menuBarItem, styles.hoverable)}
-                                onClick={this.props.onOpenTipLibrary}
-                            >
-                                <img
-                                    className={styles.helpIcon}
-                                    src={helpIcon}
-                                />
-                                Scratch Tutorials
-                            </div>
-                        </div>) :
-                        null
-                    }
+                    <a
+                        className={classNames(styles.menuBarItem, styles.hoverable, styles.blankLink)}
+                        href="https://tproffen/github.com/static/HexFiles/microbit-MaqueenControllerV2.hex" download
+                    >
+                        Maqueen HEX file
+                    </a>
                     <Divider className={classNames(styles.divider)} />
                     {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>
