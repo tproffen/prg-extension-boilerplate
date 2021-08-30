@@ -147,7 +147,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
 var onClickLogo = function onClickLogo() {
-  window.location = 'https://' + 'dancingwithai.github.io';
+  window.open('https://www.orcsgirls.org', '_blank');
 };
 
 var handleTelemetryModalCancel = function handleTelemetryModalCancel() {
