@@ -504,7 +504,7 @@ class MenuBar extends React.Component {
                     <Divider className={classNames(styles.divider)} />
                     <a
                         className={classNames(styles.menuBarItem, styles.hoverable, styles.blankLink)}
-                        href="https://tproffen.github.io/prg-extension-boilerplate/HexFiles/microbit-MaqueenControllerV2.hex" download
+                        href="https://tproffen.github.io/prg-extension-boilerplate/static/HexFiles/microbit-MaqueenControllerV2.hex" download
                     >
                         Maqueen HEX file
                     </a>
